@@ -1,185 +1,293 @@
-/**
- * Copyright 2026 Circle Internet Group, Inc.  All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- */
+"use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import {
-  Shield,
-  Zap,
-  CheckCircle,
-  Wallet,
-  FileText,
-  FileSearch,
   Lock,
+  Sparkles,
+  Zap,
+  ShieldCheck,
+  Wallet,
+  Activity,
+  CheckCircle2,
+  ArrowRight,
+  Bot,
+  Eye,
 } from "lucide-react";
 
-const LandingPage = () => {
-  return (
-    <div className="flex flex-col items-center w-full px-5">
-      {/* Hero Section */}
-      <section className="w-full max-w-6xl space-y-16 py-8">
-        <div className="flex flex-col items-center gap-8">
-          {/* Main headline */}
-          <div className="relative">
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <Shield className="w-8 h-8 text-blue-500" />
-              <Zap className="w-8 h-8 text-amber-500" />
-            </div>
-            <p className="text-4xl md:text-5xl lg:text-6xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-amber-600 leading-tight">
-              Effortless Escrow for Secure Deals
-            </p>
-            <p className="mt-4 text-xl md:text-2xl text-center text-muted-foreground">
-              AI-Powered Escrow Service for Reliable Payments and Task Validation
-            </p>
-          </div>
+type Tone = "amber" | "cyan" | "emerald";
 
-          {/* Trust indicators */}
-          <div className="flex flex-wrap justify-center gap-8 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span>Bank-Grade Security</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-blue-500" />
-              <span>24/7 Automated</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-amber-500" />
-              <span>Instant Settlement</span>
-            </div>
-          </div>
-        </div>
+const tickerSteps = [
+  { label: "Deposit locked", detail: "2,500 USDC held in escrow", tone: "amber" as Tone, Icon: Lock },
+  { label: "AI verifying deliverable", detail: "Matching work against agreed terms", tone: "cyan" as Tone, Icon: Bot },
+  { label: "Conditions met, funds auto-released", detail: "Reactive transaction fired on-chain", tone: "emerald" as Tone, Icon: CheckCircle2 },
+];
 
-        {/* Features Section */}
-        <section className="w-full space-y-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-center">
-            Why Choose Workflow Escrow?
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <FeatureCard
-              icon={<FileText className="w-8 h-8 text-blue-500" />}
-              title="AI-Powered Smart Contracts"
-              description="Automatically transform agreements into blockchain-backed smart contracts."
-            />
-            <FeatureCard
-              icon={<CheckCircle className="w-8 h-8 text-green-500" />}
-              title="Secure and Trust-Free"
-              description="Funds are protected in decentralized escrow until tasks are verified."
-            />
-            <FeatureCard
-              icon={<Wallet className="w-8 h-8 text-amber-500" />}
-              title="Instant Payments"
-              description="Funds are released automatically upon AI task approval."
-            />
-          </div>
-        </section>
-      </section>
+const steps = [
+  { no: "01", title: "Lock the funds", desc: "Client deposits USDC into a non-custodial Pactio escrow. Nobody can touch it mid-deal.", Icon: Lock },
+  { no: "02", title: "AI verifies the work", desc: "Freelancer submits the deliverable, and an AI reviewer checks it against the agreed terms.", Icon: Bot },
+  { no: "03", title: "Reactive auto-release", desc: "When conditions are met, a Rialo reactive transaction releases the funds automatically, or refunds.", Icon: Zap },
+];
 
-      {/* How It Works Section - Full width background */}
-      <section className="w-full bg-gradient-to-b from-background to-muted/50 py-16">
-        <div className="max-w-5xl mx-auto space-y-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-center">
-            How It Works
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start px-5">
-            <div className="flex flex-col items-center text-center">
-              <div className="bg-blue-100 dark:bg-blue-900/50 rounded-full p-4 mb-4">
-                <FileText className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Upload Your Agreement</h3>
-              <p className="text-sm text-muted-foreground">
-                Provide a paper contract or agreement document.
-              </p>
-            </div>
+const capabilities = [
+  { title: "Trustless by design", desc: "Funds sit in escrow logic, not in someone's wallet. No middleman can run off with the money.", Icon: ShieldCheck },
+  { title: "AI deliverable review", desc: "Payment terms are matched against submitted work automatically before any release.", Icon: Sparkles },
+  { title: "Reactive settlement", desc: "Native event and time triggers release funds the moment conditions clear, no fragile webhooks.", Icon: Zap },
+  { title: "Non-custodial wallet", desc: "Every deal gets its own on-chain address. You stay in control from start to finish.", Icon: Wallet },
+  { title: "On-chain transparency", desc: "Every lock, verification and release is traceable. No hidden ledgers.", Icon: Eye },
+  { title: "Instant finality", desc: "Once released, settlement lands in seconds, not in 30-day payout cycles.", Icon: Activity },
+];
 
-            <div className="flex flex-col items-center text-center">
-              <div className="bg-green-100 dark:bg-green-900/50 rounded-full p-4 mb-4">
-                <FileSearch className="w-8 h-8 text-green-600 dark:text-green-400" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">AI Extraction</h3>
-              <p className="text-sm text-muted-foreground">
-                Our AI extracts task details and payment terms.
-              </p>
-            </div>
+const integrations = ["Rialo", "USDC", "Supabase", "OpenAI", "Next.js"];
 
-            <div className="flex flex-col items-center text-center">
-              <div className="bg-yellow-100 dark:bg-yellow-900/50 rounded-full p-4 mb-4">
-                <Lock className="w-8 h-8 text-amber-600 dark:text-amber-400" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Escrow Creation</h3>
-              <p className="text-sm text-muted-foreground">
-                A smart contract is deployed, holding funds securely.
-              </p>
-            </div>
+const comparison = [
+  { feature: "Funds held safely", traditional: "Depends on platform", manual: "No, pay and pray", pactio: "On-chain escrow" },
+  { feature: "Release trigger", traditional: "Manual dispute team", manual: "Manual trust", pactio: "Reactive auto-release" },
+  { feature: "Deliverable check", traditional: "Human, slow", manual: "None", pactio: "AI-verified" },
+  { feature: "Fees", traditional: "10 to 20 percent", manual: "Zero but risky", pactio: "Minimal on-chain" },
+  { feature: "Settlement", traditional: "Days to weeks", manual: "Whenever", pactio: "Seconds" },
+];
 
-            <div className="flex flex-col items-center text-center">
-              <div className="bg-purple-100 dark:bg-purple-900/50 rounded-full p-4 mb-4">
-                <CheckCircle className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">AI Validation</h3>
-              <p className="text-sm text-muted-foreground">
-                AI reviews submitted work and triggers payment release.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action Section */}
-      <section className="w-full max-w-5xl py-16 space-y-8">
-        <div className="text-center space-y-4">
-          <h2 className="text-3xl md:text-4xl font-bold">
-            Ready to Simplify Your Transactions?
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            Join the future of secure and automated escrow services today.
-          </p>
-        </div>
-        <div className="flex justify-center">
-          <Link href="/sign-up">
-            <Button size="lg">Get Started Now</Button>
-          </Link>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="w-full border-t border-border py-8">
-        <div className="max-w-5xl mx-auto px-5 text-center text-sm text-muted-foreground">
-          © 2026 Circle Internet Group. All rights reserved.
-        </div>
-      </footer>
-    </div>
-  );
-};
-
-interface FeatureCardProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
+function toneText(tone: Tone) {
+  if (tone === "amber") return "text-amber-300";
+  if (tone === "cyan") return "text-cyan-300";
+  return "text-emerald-300";
 }
 
-const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) => {
+function toneDot(tone: Tone) {
+  if (tone === "amber") return "bg-amber-400";
+  if (tone === "cyan") return "bg-cyan-400";
+  return "bg-emerald-400";
+}
+
+const LandingPage = () => {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setActive((prev) => (prev + 1) % tickerSteps.length);
+    }, 2600);
+    return () => clearInterval(id);
+  }, []);
+
   return (
-    <div className="bg-card p-6 rounded-lg border border-border">
-      <div className="flex items-center justify-center mb-4">{icon}</div>
-      <h3 className="text-xl font-semibold text-center mb-2">{title}</h3>
-      <p className="text-muted-foreground text-center">{description}</p>
+    <div className="relative min-h-screen overflow-hidden bg-[#060b0a] text-[#e6e9ea]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_45%_at_50%_0%,rgba(16,185,129,0.14),transparent_70%)]" />
+      <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 top-52 h-72 w-72 rounded-full bg-teal-400/10 blur-3xl" />
+
+      <div className="relative mx-auto max-w-6xl px-5 pb-24">
+        <section className="flex flex-col items-center pt-16 text-center sm:pt-24">
+          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-1.5 text-xs font-medium text-emerald-300">
+            <Zap className="h-3.5 w-3.5" />
+            Built on Rialo, reactive escrow
+          </span>
+
+          <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
+            Escrow that{" "}
+            <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300 bg-clip-text text-transparent">
+              releases itself
+            </span>
+          </h1>
+
+          <p className="mt-5 max-w-xl text-base text-[#9fb0ab] sm:text-lg">
+            Pactio locks freelance payments on-chain, lets AI verify the delivered
+            work, and uses Rialo reactive transactions to release funds the instant
+            the deal is done.
+          </p>
+
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-6 py-3 text-sm font-semibold text-[#04120d] shadow-[0_0_30px_rgba(16,185,129,0.35)] transition hover:bg-emerald-400"
+            >
+              Launch app
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="#how"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-[#e6e9ea] transition hover:border-emerald-400/40 hover:bg-white/10"
+            >
+              How it works
+            </Link>
+          </div>
+
+          <div className="mt-14 w-full max-w-lg rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-md">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <span className="text-xs font-medium uppercase tracking-widest text-[#7d918b]">
+                Live escrow
+              </span>
+              <span className="flex items-center gap-2 text-xs text-emerald-300">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                </span>
+                reactive
+              </span>
+            </div>
+
+            <div className="mt-4 space-y-3 text-left">
+              {tickerSteps.map((s, i) => {
+                const Icon = s.Icon;
+                const isActive = i === active;
+                return (
+                  <div
+                    key={s.label}
+                    className={
+                      "flex items-center gap-3 rounded-xl border px-4 py-3 transition-all duration-500 " +
+                      (isActive
+                        ? "border-emerald-400/30 bg-emerald-400/[0.06] opacity-100"
+                        : "border-transparent opacity-40")
+                    }
+                  >
+                    <Icon className={"h-5 w-5 shrink-0 " + toneText(s.tone)} />
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-[#e6e9ea]">{s.label}</p>
+                      <p className="truncate font-mono text-xs text-[#7d918b]">{s.detail}</p>
+                    </div>
+                    <span
+                      className={
+                        "ml-auto h-2 w-2 shrink-0 rounded-full " +
+                        (isActive ? toneDot(s.tone) : "bg-white/10")
+                      }
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section id="how" className="mt-28">
+          <h2 className="text-center text-2xl font-bold sm:text-3xl">
+            From locked to released, automatically
+          </h2>
+          <p className="mx-auto mt-3 max-w-md text-center text-sm text-[#9fb0ab]">
+            Three steps. Zero chasing invoices.
+          </p>
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            {steps.map((s) => {
+              const Icon = s.Icon;
+              return (
+                <div
+                  key={s.no}
+                  className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md transition hover:border-emerald-400/30"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-3xl font-bold text-emerald-400/40 group-hover:text-emerald-400/70">
+                      {s.no}
+                    </span>
+                    <Icon className="h-6 w-6 text-emerald-300" />
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold">{s.title}</h3>
+                  <p className="mt-2 text-sm text-[#9fb0ab]">{s.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="mt-28">
+          <h2 className="text-center text-2xl font-bold sm:text-3xl">Why Pactio</h2>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {capabilities.map((c) => {
+              const Icon = c.Icon;
+              return (
+                <div
+                  key={c.title}
+                  className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md transition hover:border-emerald-400/30 hover:bg-white/[0.05]"
+                >
+                  <div className="inline-flex rounded-lg border border-emerald-400/20 bg-emerald-400/10 p-2.5">
+                    <Icon className="h-5 w-5 text-emerald-300" />
+                  </div>
+                  <h3 className="mt-4 text-base font-semibold">{c.title}</h3>
+                  <p className="mt-2 text-sm text-[#9fb0ab]">{c.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="mt-24">
+          <p className="text-center text-xs font-medium uppercase tracking-widest text-[#7d918b]">
+            Powered by
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            {integrations.map((name) => (
+              <span
+                key={name}
+                className="rounded-full border border-white/10 bg-white/[0.03] px-5 py-2 font-mono text-sm text-[#c7d3cf]"
+              >
+                {name}
+              </span>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-28">
+          <h2 className="text-center text-2xl font-bold sm:text-3xl">Pactio vs the old way</h2>
+          <div className="mt-10 overflow-x-auto rounded-2xl border border-white/10">
+            <table className="w-full min-w-[560px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="bg-white/[0.03] text-[#9fb0ab]">
+                  <th className="px-5 py-4 font-medium"> </th>
+                  <th className="px-5 py-4 font-medium">Traditional escrow</th>
+                  <th className="px-5 py-4 font-medium">Manual freelance</th>
+                  <th className="px-5 py-4 font-semibold text-emerald-300">Pactio</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparison.map((row) => (
+                  <tr key={row.feature} className="border-t border-white/10">
+                    <td className="px-5 py-4 font-medium text-[#e6e9ea]">{row.feature}</td>
+                    <td className="px-5 py-4 text-[#889b95]">{row.traditional}</td>
+                    <td className="px-5 py-4 text-[#889b95]">{row.manual}</td>
+                    <td className="px-5 py-4 font-medium text-emerald-300">
+                      <span className="inline-flex items-center gap-1.5">
+                        <CheckCircle2 className="h-4 w-4" />
+                        {row.pactio}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section className="mt-28">
+          <div className="relative overflow-hidden rounded-3xl border border-emerald-400/20 bg-gradient-to-br from-emerald-500/10 via-white/[0.02] to-cyan-400/10 px-6 py-14 text-center">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(50%_60%_at_50%_0%,rgba(16,185,129,0.18),transparent_70%)]" />
+            <div className="relative">
+              <h2 className="text-2xl font-bold sm:text-4xl">
+                Get paid the moment the work is done
+              </h2>
+              <p className="mx-auto mt-4 max-w-md text-sm text-[#9fb0ab]">
+                Stop chasing invoices and disputing platforms. Let the escrow release itself.
+              </p>
+              <Link
+                href="/dashboard"
+                className="mt-8 inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-7 py-3 text-sm font-semibold text-[#04120d] shadow-[0_0_30px_rgba(16,185,129,0.4)] transition hover:bg-emerald-400"
+              >
+                Launch Pactio
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <footer className="mt-20 border-t border-white/10 pt-8 text-center">
+          <p className="text-sm font-semibold text-[#e6e9ea]">Pactio</p>
+          <p className="mt-2 text-xs text-[#7d918b]">
+            Reactive escrow for freelance deals, built on Rialo
+          </p>
+          <p className="mx-auto mt-3 max-w-md text-[11px] text-[#5f716b]">
+            Demo build. Rialo on-chain integration is currently simulated while the
+            public testnet and SDK roll out.
+          </p>
+        </footer>
+      </div>
     </div>
   );
 };
