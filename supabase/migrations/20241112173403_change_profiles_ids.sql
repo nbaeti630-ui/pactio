@@ -40,7 +40,7 @@ DROP FUNCTION IF EXISTS handle_new_user();
 DROP TABLE profiles;
 
 CREATE TABLE profiles (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     auth_user_id UUID NOT NULL REFERENCES auth.users(id),
     name VARCHAR NOT NULL,
     avatar_url TEXT,
@@ -91,7 +91,7 @@ CREATE TRIGGER on_auth_user_created
 -- Restore existing profiles data with proper mapping
 INSERT INTO profiles (id, auth_user_id, name, avatar_url, created_at, updated_at, is_active)
 SELECT 
-    uuid_generate_v4(), -- Generate new UUID for profile
+    gen_random_uuid(), -- Generate new UUID for profile
     id,                -- Use existing id as auth_user_id
     name,
     avatar_url,

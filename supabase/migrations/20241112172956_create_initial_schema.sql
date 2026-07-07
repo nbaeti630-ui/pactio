@@ -77,7 +77,7 @@ GRANT EXECUTE ON FUNCTION handle_new_user() TO service_role;
 
 -- Wallets table
 CREATE TABLE wallets (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES profiles(id),
     circle_wallet_id VARCHAR NOT NULL,
     wallet_type VARCHAR NOT NULL,
@@ -101,7 +101,7 @@ CREATE POLICY "Users can insert own wallets" ON wallets
 
 -- Transactions table
 CREATE TABLE transactions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     wallet_id UUID NOT NULL REFERENCES wallets(id),
     user_id UUID NOT NULL REFERENCES profiles(id),
     circle_transaction_id VARCHAR NOT NULL,
@@ -124,7 +124,7 @@ CREATE POLICY "Users can insert own transactions" ON transactions
 
 -- Escrow Agreements table
 CREATE TABLE escrow_agreements (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     beneficiary_wallet_id UUID NOT NULL REFERENCES wallets(id),
     depositor_wallet_id UUID NOT NULL REFERENCES wallets(id),
     transaction_id UUID NOT NULL REFERENCES transactions(id),
@@ -163,7 +163,7 @@ CREATE POLICY "Users can insert escrow agreements" ON escrow_agreements
 
 -- Dispute Resolutions table
 CREATE TABLE dispute_resolutions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     escrow_agreement_id UUID NOT NULL REFERENCES escrow_agreements(id),
     resolver_user_id UUID NOT NULL REFERENCES profiles(id),
     status VARCHAR NOT NULL,
@@ -231,9 +231,9 @@ GRANT USAGE ON SCHEMA public TO authenticated;
 GRANT USAGE ON SCHEMA public TO service_role;
 
 -- Grant usage of uuid-ossp functions
-GRANT EXECUTE ON FUNCTION uuid_generate_v4() TO anon;
-GRANT EXECUTE ON FUNCTION uuid_generate_v4() TO authenticated;
-GRANT EXECUTE ON FUNCTION uuid_generate_v4() TO service_role;
+GRANT EXECUTE ON FUNCTION gen_random_uuid() TO anon;
+GRANT EXECUTE ON FUNCTION gen_random_uuid() TO authenticated;
+GRANT EXECUTE ON FUNCTION gen_random_uuid() TO service_role;
 
 -- Grant table permissions to authenticated users
 GRANT ALL ON ALL TABLES IN SCHEMA public TO authenticated;

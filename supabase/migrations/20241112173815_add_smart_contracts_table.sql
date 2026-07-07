@@ -15,7 +15,7 @@
 -- SPDX-License-Identifier: Apache-2.0
 
 create table if not exists public.smart_contracts (
-    id uuid not null default uuid_generate_v4() primary key,
+    id uuid not null default gen_random_uuid() primary key,
     wallet_id uuid references public.wallets(id),
     escrow_agreement_id uuid not null references public.escrow_agreements(id),
     contract_address varchar(255),
