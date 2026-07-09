@@ -120,7 +120,7 @@ export const UploadContractButton = (props: CreateAgreementProps) => {
       <input
         ref={hiddenFileInput}
         type="file"
-        accept=".pdf,.docx"
+        accept=".pdf,.docx,.txt,.md,text/plain,application/pdf"
         onChange={handleFileChange}
         hidden
       />

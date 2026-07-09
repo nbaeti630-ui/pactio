@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
 			.from("escrow_agreements")
 			.update({
 				circle_contract_id: createResponse.data.contractId,
-				status: "PENDING",
+				status: "OPEN",
 			})
 			.eq("id", body.agreement.id)
 
@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
 				success: true,
 				id: createResponse.data.contractId,
 				transactionId: createResponse.data.transactionId,
-				status: "PENDING",
+				status: "OPEN",
 				message: "Rialo escrow program deployed (simulated); funds locked",
 				addresses: {
 					depositor: body.agreement.depositor_wallet?.wallet_address,

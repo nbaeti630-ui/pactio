@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
 
 		await supabase
 			.from("escrow_agreements")
-			.update({ status: "PENDING" })
+			.update({ status: "LOCKED" })
 			.eq("circle_contract_id", contractData.data.contract.id)
 
 		return NextResponse.json(
