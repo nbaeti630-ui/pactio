@@ -187,7 +187,7 @@ export const useContractUpload = (props: CreateAgreementProps) => {
 
       return { analysis, agreement };
     } catch (error) {
-      console.error("Process error:", error); alert("PROCESS FAILED: " + (error instanceof Error ? error.message : String(error)));
+      console.error("Process error:", error);
 
       if (tempPath) {
         try {
