@@ -268,3 +268,110 @@
   --shadow-xl: 0px 2px 3px 0px hsl(0 0% 5% / 0.18), 0px 8px 10px -1px hsl(0 0% 5% / 0.18);
   --shadow-2xl: 0px 2px 3px 0px hsl(0 0% 5% / 0.45);
 }
+
+/* ===== PACTIO MAKEOVER START ===== */
+.dark { --background: oklch(0.15 0.012 168); --card: oklch(0.19 0.014 168); }
+
+body { position: relative; background-color: #060b0a; overflow-x: hidden; }
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: -25% -15% auto -15%;
+  height: 100vh;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 52% at 18% 10%, rgba(16,185,129,0.30), transparent 68%),
+    radial-gradient(36% 46% at 85% 6%, rgba(45,212,191,0.22), transparent 68%),
+    radial-gradient(48% 58% at 60% 40%, rgba(16,185,129,0.14), transparent 72%);
+  filter: blur(36px);
+  animation: pactio-aurora 20s ease-in-out infinite alternate;
+}
+@keyframes pactio-aurora {
+  0%   { transform: translate3d(0,0,0) scale(1);      opacity: 0.85; }
+  50%  { transform: translate3d(2%,2%,0) scale(1.09);  opacity: 1; }
+  100% { transform: translate3d(-2%,1%,0) scale(1.04); opacity: 0.8; }
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@keyframes pactio-fade-up { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+.pactio-fade-up { opacity: 0; animation: pactio-fade-up 0.7s cubic-bezier(0.22,1,0.36,1) forwards; }
+.pactio-d1 { animation-delay: 0.08s; }
+.pactio-d2 { animation-delay: 0.18s; }
+.pactio-d3 { animation-delay: 0.30s; }
+.pactio-d4 { animation-delay: 0.42s; }
+
+@keyframes pactio-orb-pulse {
+  0%, 100% { opacity: 0.55; transform: translate(-50%,-50%) scale(1); }
+  50%      { opacity: 0.9;  transform: translate(-50%,-50%) scale(1.15); }
+}
+.pactio-hero-orb {
+  position: absolute;
+  top: 42%; left: 50%;
+  width: min(760px, 96vw); height: min(760px, 96vw);
+  transform: translate(-50%,-50%);
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(16,185,129,0.34), rgba(45,212,191,0.12) 45%, transparent 70%);
+  filter: blur(46px);
+  z-index: -1;
+  pointer-events: none;
+  animation: pactio-orb-pulse 7s ease-in-out infinite;
+}
+
+.pactio-title-glow { text-shadow: 0 0 34px rgba(45,212,191,0.4); }
+
+.pactio-glass {
+  background: linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025));
+  border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 24px 70px -24px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.pactio-card {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)),
+    radial-gradient(120% 80% at 50% 0%, rgba(16,185,129,0.07), transparent 60%);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 18px 44px -28px rgba(16,185,129,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
+  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.pactio-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(45,212,191,0.55), transparent);
+}
+.pactio-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(45,212,191,0.45);
+  box-shadow: 0 26px 54px -22px rgba(16,185,129,0.6);
+}
+
+.pactio-glass table th:last-child { background: rgba(16,185,129,0.12); }
+.pactio-glass table td:last-child { background: rgba(16,185,129,0.06); }
+
+.pactio-cta { background: linear-gradient(135deg, #10b981, #2dd4bf); transition: box-shadow 0.35s ease, transform 0.2s ease; }
+.pactio-cta:hover { box-shadow: 0 12px 40px -8px rgba(45,212,191,0.6); transform: translateY(-2px); }
+
+.pactio-reveal.reveal-init { opacity: 0; transform: translateY(26px); }
+.pactio-reveal.reveal-init.is-visible { opacity: 1; transform: none; transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .pactio-fade-up, .pactio-hero-orb, body::before { animation: none !important; }
+  .pactio-fade-up { opacity: 1 !important; }
+}
+/* ===== PACTIO MAKEOVER END ===== */
+

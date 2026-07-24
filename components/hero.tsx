@@ -70,181 +70,155 @@ const LandingPage = () => {
     return () => clearInterval(id);
   }, []);
 
+  useEffect(() => {
+    const els = Array.from(document.querySelectorAll(".pactio-reveal"));
+    els.forEach((el) => el.classList.add("reveal-init"));
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#060b0a] text-[#e6e9ea]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_45%_at_50%_0%,rgba(16,185,129,0.14),transparent_70%)]" />
-      <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
-      <div className="pointer-events-none absolute -right-24 top-52 h-72 w-72 rounded-full bg-teal-400/10 blur-3xl" />
+    <div className="relative w-full overflow-hidden text-white">
+      <section className="relative mx-auto flex max-w-5xl flex-col items-center px-5 pb-16 pt-16 text-center sm:pt-24">
+        <div className="pactio-hero-orb" aria-hidden="true" />
 
-      <div className="relative mx-auto max-w-6xl px-5 pb-24">
-        <section className="flex flex-col items-center pt-16 text-center sm:pt-24">
-          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-1.5 text-xs font-medium text-emerald-300">
-            <Zap className="h-3.5 w-3.5" />
-            Built on Rialo, reactive escrow
+        <span className="pactio-fade-up inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-1.5 text-xs font-medium text-emerald-200">
+          <Zap className="h-3.5 w-3.5" />
+          Built on Rialo, reactive escrow
+        </span>
+
+        <h1 className="pactio-fade-up pactio-d1 pactio-title-glow mt-6 text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-7xl">
+          Escrow that{" "}
+          <span className="bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-300 bg-clip-text text-transparent">
+            releases itself
           </span>
+        </h1>
 
-          <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
-            Escrow that{" "}
-            <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300 bg-clip-text text-transparent">
-              releases itself
+        <p className="pactio-fade-up pactio-d2 mt-6 max-w-2xl text-base leading-relaxed text-white/60 sm:text-lg">
+          Pactio locks freelance payments on-chain, lets AI verify the delivered
+          work, and uses Rialo reactive transactions to release funds the instant
+          the deal is done.
+        </p>
+
+        <div className="pactio-fade-up pactio-d3 mt-9 flex flex-wrap items-center justify-center gap-3">
+          <Link href="/dashboard" className="pactio-cta inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-emerald-950">
+            Launch app
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link href="#how" className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white/80 transition hover:border-white/30 hover:bg-white/10">
+            How it works
+          </Link>
+        </div>
+
+        <div className="pactio-fade-up pactio-d4 pactio-glass mt-14 w-full max-w-xl rounded-2xl p-5 text-left">
+          <div className="mb-4 flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-widest text-white/50">Live escrow</span>
+            <span className="inline-flex items-center gap-2 text-xs font-medium text-emerald-300">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+              reactive
             </span>
-          </h1>
-
-          <p className="mt-5 max-w-xl text-base text-[#9fb0ab] sm:text-lg">
-            Pactio locks freelance payments on-chain, lets AI verify the delivered
-            work, and uses Rialo reactive transactions to release funds the instant
-            the deal is done.
-          </p>
-
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-6 py-3 text-sm font-semibold text-[#04120d] shadow-[0_0_30px_rgba(16,185,129,0.35)] transition hover:bg-emerald-400"
-            >
-              Launch app
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="#how"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-[#e6e9ea] transition hover:border-emerald-400/40 hover:bg-white/10"
-            >
-              How it works
-            </Link>
           </div>
 
-          <div className="mt-14 w-full max-w-lg rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-md">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <span className="text-xs font-medium uppercase tracking-widest text-[#7d918b]">
-                Live escrow
-              </span>
-              <span className="flex items-center gap-2 text-xs text-emerald-300">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-                </span>
-                reactive
-              </span>
-            </div>
-
-            <div className="mt-4 space-y-3 text-left">
-              {tickerSteps.map((s, i) => {
-                const Icon = s.Icon;
-                const isActive = i === active;
-                return (
-                  <div
-                    key={s.label}
-                    className={
-                      "flex items-center gap-3 rounded-xl border px-4 py-3 transition-all duration-500 " +
-                      (isActive
-                        ? "border-emerald-400/30 bg-emerald-400/[0.06] opacity-100"
-                        : "border-transparent opacity-40")
-                    }
-                  >
-                    <Icon className={"h-5 w-5 shrink-0 " + toneText(s.tone)} />
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-[#e6e9ea]">{s.label}</p>
-                      <p className="truncate font-mono text-xs text-[#7d918b]">{s.detail}</p>
-                    </div>
-                    <span
-                      className={
-                        "ml-auto h-2 w-2 shrink-0 rounded-full " +
-                        (isActive ? toneDot(s.tone) : "bg-white/10")
-                      }
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section id="how" className="mt-28">
-          <h2 className="text-center text-2xl font-bold sm:text-3xl">
-            From locked to released, automatically
-          </h2>
-          <p className="mx-auto mt-3 max-w-md text-center text-sm text-[#9fb0ab]">
-            Three steps. Zero chasing invoices.
-          </p>
-
-          <div className="mt-10 grid gap-4 sm:grid-cols-3">
-            {steps.map((s) => {
+          <div className="flex flex-col gap-2.5">
+            {tickerSteps.map((s, i) => {
               const Icon = s.Icon;
+              const isActive = i === active;
               return (
-                <div
-                  key={s.no}
-                  className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md transition hover:border-emerald-400/30"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-3xl font-bold text-emerald-400/40 group-hover:text-emerald-400/70">
-                      {s.no}
-                    </span>
-                    <Icon className="h-6 w-6 text-emerald-300" />
+                <div key={s.label} className={isActive ? "flex items-center gap-3 rounded-xl border border-emerald-400/40 bg-emerald-400/10 p-3 shadow-[0_0_30px_-8px_rgba(16,185,129,0.6)] transition-all duration-500" : "flex items-center gap-3 rounded-xl border border-white/5 bg-white/5 p-3 opacity-60 transition-all duration-500"}>
+                  <span className={"flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/5 " + toneText(s.tone)}>
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium text-white/90">{s.label}</p>
+                    <p className="truncate text-xs text-white/50">{s.detail}</p>
                   </div>
-                  <h3 className="mt-4 text-lg font-semibold">{s.title}</h3>
-                  <p className="mt-2 text-sm text-[#9fb0ab]">{s.desc}</p>
+                  <span className={"h-2 w-2 shrink-0 rounded-full " + (isActive ? toneDot(s.tone) : "bg-white/20")} />
                 </div>
               );
             })}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="mt-28">
-          <h2 className="text-center text-2xl font-bold sm:text-3xl">Why Pactio</h2>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {capabilities.map((c) => {
-              const Icon = c.Icon;
-              return (
-                <div
-                  key={c.title}
-                  className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md transition hover:border-emerald-400/30 hover:bg-white/[0.05]"
-                >
-                  <div className="inline-flex rounded-lg border border-emerald-400/20 bg-emerald-400/10 p-2.5">
-                    <Icon className="h-5 w-5 text-emerald-300" />
-                  </div>
-                  <h3 className="mt-4 text-base font-semibold">{c.title}</h3>
-                  <p className="mt-2 text-sm text-[#9fb0ab]">{c.desc}</p>
+      <section id="how" className="mx-auto max-w-6xl px-5 py-20">
+        <h2 className="pactio-reveal text-center text-3xl font-bold tracking-tight sm:text-4xl">From locked to released, automatically</h2>
+        <p className="pactio-reveal mt-3 text-center text-white/50">Three steps. Zero chasing invoices.</p>
+        <div className="mt-12 grid gap-5 md:grid-cols-3">
+          {steps.map((s) => {
+            const Icon = s.Icon;
+            return (
+              <div key={s.no} className="pactio-reveal pactio-card rounded-2xl p-6">
+                <div className="flex items-center justify-between">
+                  <span className="text-2xl font-bold text-emerald-300/80">{s.no}</span>
+                  <Icon className="h-5 w-5 text-emerald-300" />
                 </div>
-              );
-            })}
-          </div>
-        </section>
+                <h3 className="mt-5 text-lg font-semibold">{s.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/55">{s.desc}</p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
-        <section className="mt-24">
-          <p className="text-center text-xs font-medium uppercase tracking-widest text-[#7d918b]">
-            Powered by
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            {integrations.map((name) => (
-              <span
-                key={name}
-                className="rounded-full border border-white/10 bg-white/[0.03] px-5 py-2 font-mono text-sm text-[#c7d3cf]"
-              >
-                {name}
-              </span>
-            ))}
-          </div>
-        </section>
+      <section className="mx-auto max-w-6xl px-5 py-12">
+        <h2 className="pactio-reveal text-center text-3xl font-bold tracking-tight sm:text-4xl">Why Pactio</h2>
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {capabilities.map((c) => {
+            const Icon = c.Icon;
+            return (
+              <div key={c.title} className="pactio-reveal pactio-card rounded-2xl p-6">
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-400/10 text-emerald-300">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <h3 className="mt-5 text-base font-semibold">{c.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/55">{c.desc}</p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
-        <section className="mt-28">
-          <h2 className="text-center text-2xl font-bold sm:text-3xl">Pactio vs the old way</h2>
-          <div className="mt-10 overflow-x-auto rounded-2xl border border-white/10">
-            <table className="w-full min-w-[560px] border-collapse text-left text-sm">
+      <section className="mx-auto max-w-4xl px-5 py-16 text-center">
+        <p className="pactio-reveal text-xs font-semibold uppercase tracking-widest text-white/40">Powered by</p>
+        <div className="pactio-reveal mt-6 flex flex-wrap items-center justify-center gap-3">
+          {integrations.map((name) => (
+            <span key={name} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/70">{name}</span>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-5 py-16">
+        <h2 className="pactio-reveal text-center text-3xl font-bold tracking-tight sm:text-4xl">Pactio vs the old way</h2>
+        <div className="pactio-reveal pactio-glass mt-10 overflow-hidden rounded-2xl">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[520px] text-left text-sm">
               <thead>
-                <tr className="bg-white/[0.03] text-[#9fb0ab]">
-                  <th className="px-5 py-4 font-medium"> </th>
-                  <th className="px-5 py-4 font-medium">Traditional escrow</th>
-                  <th className="px-5 py-4 font-medium">Manual freelance</th>
-                  <th className="px-5 py-4 font-semibold text-emerald-300">Pactio</th>
+                <tr className="border-b border-white/10 text-white/50">
+                  <th className="p-4 font-medium"></th>
+                  <th className="p-4 font-medium">Traditional escrow</th>
+                  <th className="p-4 font-medium">Manual freelance</th>
+                  <th className="p-4 font-semibold text-emerald-300">Pactio</th>
                 </tr>
               </thead>
               <tbody>
                 {comparison.map((row) => (
-                  <tr key={row.feature} className="border-t border-white/10">
-                    <td className="px-5 py-4 font-medium text-[#e6e9ea]">{row.feature}</td>
-                    <td className="px-5 py-4 text-[#889b95]">{row.traditional}</td>
-                    <td className="px-5 py-4 text-[#889b95]">{row.manual}</td>
-                    <td className="px-5 py-4 font-medium text-emerald-300">
-                      <span className="inline-flex items-center gap-1.5">
+                  <tr key={row.feature} className="border-b border-white/5 last:border-0">
+                    <td className="p-4 font-medium text-white/80">{row.feature}</td>
+                    <td className="p-4 text-white/50">{row.traditional}</td>
+                    <td className="p-4 text-white/50">{row.manual}</td>
+                    <td className="p-4">
+                      <span className="inline-flex items-center gap-1.5 font-medium text-emerald-300">
                         <CheckCircle2 className="h-4 w-4" />
                         {row.pactio}
                       </span>
@@ -254,40 +228,26 @@ const LandingPage = () => {
               </tbody>
             </table>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="mt-28">
-          <div className="relative overflow-hidden rounded-3xl border border-emerald-400/20 bg-gradient-to-br from-emerald-500/10 via-white/[0.02] to-cyan-400/10 px-6 py-14 text-center">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(50%_60%_at_50%_0%,rgba(16,185,129,0.18),transparent_70%)]" />
-            <div className="relative">
-              <h2 className="text-2xl font-bold sm:text-4xl">
-                Get paid the moment the work is done
-              </h2>
-              <p className="mx-auto mt-4 max-w-md text-sm text-[#9fb0ab]">
-                Stop chasing invoices and disputing platforms. Let the escrow release itself.
-              </p>
-              <Link
-                href="/dashboard"
-                className="mt-8 inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-7 py-3 text-sm font-semibold text-[#04120d] shadow-[0_0_30px_rgba(16,185,129,0.4)] transition hover:bg-emerald-400"
-              >
-                Launch Pactio
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </section>
+      <section className="mx-auto max-w-5xl px-5 py-20">
+        <div className="pactio-reveal pactio-glass relative overflow-hidden rounded-3xl px-6 py-16 text-center">
+          <div className="pactio-hero-orb" aria-hidden="true" />
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Get paid the moment the work is done</h2>
+          <p className="mx-auto mt-4 max-w-xl text-white/60">Stop chasing invoices and disputing platforms. Let the escrow release itself.</p>
+          <Link href="/dashboard" className="pactio-cta mt-8 inline-flex items-center gap-2 rounded-full px-7 py-3 text-sm font-semibold text-emerald-950">
+            Launch Pactio
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </section>
 
-        <footer className="mt-20 border-t border-white/10 pt-8 text-center">
-          <p className="text-sm font-semibold text-[#e6e9ea]">Pactio</p>
-          <p className="mt-2 text-xs text-[#7d918b]">
-            Reactive escrow for freelance deals, built on Rialo
-          </p>
-          <p className="mx-auto mt-3 max-w-md text-[11px] text-[#5f716b]">
-            Demo build. Rialo on-chain integration is currently simulated while the
-            public testnet and SDK roll out.
-          </p>
-        </footer>
-      </div>
+      <footer className="mx-auto max-w-5xl px-5 py-12 text-center">
+        <p className="text-lg font-bold">Pactio</p>
+        <p className="mt-2 text-sm text-white/50">Reactive escrow for freelance deals, built on Rialo</p>
+        <p className="mx-auto mt-4 max-w-md text-xs text-white/30">Demo build. Rialo on-chain integration is currently simulated while the public testnet and SDK roll out.</p>
+      </footer>
     </div>
   );
 };
