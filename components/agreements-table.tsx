@@ -207,7 +207,7 @@ export const EscrowAgreementsTable = (props: EscrowAgreementsTableProps) => {
                             <TableCell>
                               {agreement.beneficiary_wallet?.profiles?.name ?? agreement.beneficiary_wallet.profiles.email}
                             </TableCell>
-                            <TableCell>{agreement.status}</TableCell>
+                            <TableCell><span className="pactio-badge" data-status={agreement.status}>{agreement.status}</span></TableCell>
                             <TableCell>
                               {agreement.terms?.amounts?.[0]?.amount ?? "N/A"}
                             </TableCell>

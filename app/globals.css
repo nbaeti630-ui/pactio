@@ -375,3 +375,65 @@ body::after {
 }
 /* ===== PACTIO MAKEOVER END ===== */
 
+/* ===== PACTIO DASH START ===== */
+.bg-card {
+  position: relative;
+  background:
+    linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)),
+    radial-gradient(120% 80% at 50% 0%, rgba(16,185,129,0.06), transparent 60%);
+  border-color: rgba(255,255,255,0.10);
+  box-shadow:
+    0 18px 44px -28px rgba(16,185,129,0.40),
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    inset 0 2px 0 -1px rgba(45,212,191,0.30);
+}
+.pactio-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  line-height: 1.5;
+  white-space: nowrap;
+  color: #cbd5e1;
+}
+.pactio-badge::before {
+  content: "";
+  width: 0.45em;
+  height: 0.45em;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+.pactio-badge[data-status="INITIATED"],
+.pactio-badge[data-status="PENDING"] {
+  color: #cbd5e1;
+  background: rgba(148,163,184,0.10);
+  border-color: rgba(148,163,184,0.30);
+}
+.pactio-badge[data-status="OPEN"] {
+  color: #67e8f9;
+  background: rgba(34,211,238,0.10);
+  border-color: rgba(34,211,238,0.35);
+  box-shadow: 0 0 14px -4px rgba(34,211,238,0.65);
+}
+.pactio-badge[data-status="LOCKED"] {
+  color: #fcd34d;
+  background: rgba(245,158,11,0.10);
+  border-color: rgba(245,158,11,0.35);
+  box-shadow: 0 0 14px -4px rgba(245,158,11,0.65);
+}
+.pactio-badge[data-status="CLOSED"],
+.pactio-badge[data-status="VERIFIED"] {
+  color: #6ee7b7;
+  background: rgba(16,185,129,0.12);
+  border-color: rgba(16,185,129,0.40);
+  box-shadow: 0 0 16px -3px rgba(16,185,129,0.70);
+}
+/* ===== PACTIO DASH END ===== */
+
