@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 260" width="920" height="260">
+  <defs>
+    <linearGradient id="pg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34d399"/>
+      <stop offset="1" stop-color="#2dd4bf"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(10,10) scale(0.46)">
+    <rect x="40" y="40" width="432" height="432" rx="112" fill="#0b1512" stroke="#2dd4bf" stroke-opacity="0.35" stroke-width="4"/>
+    <rect x="170" y="92" width="56" height="296" rx="28" fill="url(#pg)"/>
+    <path d="M198 93 A112 112 0 0 1 198 317 L198 261 A56 56 0 0 0 198 149 Z" fill="url(#pg)"/>
+    <g fill="#2dd4bf">
+      <rect x="291" y="250" width="16" height="70" rx="8"/>
+      <path d="M275 306 L323 306 L299 342 Z"/>
+    </g>
+  </g>
+  <text x="270" y="130" font-family="'Trebuchet MS','Segoe UI',Arial,sans-serif" font-size="104" font-weight="bold" fill="#eef2f1">Pactio</text>
+  <text x="274" y="188" font-family="Arial,sans-serif" font-size="30" fill="#2dd4bf">Escrow that releases itself</text>
+</svg>

@@ -62,12 +62,7 @@ export default async function RootLayout({
               <div className="w-full max-w-7xl mx-auto flex justify-between items-center h-full px-5 text-sm">
                 <div className="flex gap-5 items-center font-semibold">
                   <ThemeSwitcher />
-                  <Link
-                    href={"/"}
-                    className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-amber-600 font-bold text-lg hover:opacity-80 transition-opacity"
-                  >
-                    Pactio
-                  </Link>
+                  <Link href={"/"} className="flex items-center gap-2 hover:opacity-80 transition-opacity"><img src="/icon.svg" alt="Pactio logo" width={28} height={28} /><span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-300 font-bold text-lg tracking-tight">Pactio</span></Link>
                   <div className="flex items-center gap-2"></div>
                 </div>
                 {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
