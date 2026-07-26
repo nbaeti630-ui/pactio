@@ -83,10 +83,10 @@ export async function POST(request: Request) {
 
 		if (isAiEnabled()) {
 			const prompt =
-				"Validate if the attached image strictly meets ALL the criteria below. " +
+				"Validate whether the attached image is a plausible, good-faith work deliverable for the project described below. Judge holistically and do NOT demand proof of things that cannot be seen in a single image (such as revision history or file formats like SVG). " +
 				"Answer ONLY with JSON of shape " +
 				'{ "valid": boolean, "confidence": "LOW" | "MEDIUM" | "HIGH", "reasons": string[] }. ' +
-				"No markdown, no backticks. Use HIGH only if certain all requirements are met. " +
+				"No markdown, no backticks. Use HIGH when the image is clearly a relevant design or logo deliverable for this project. " +
 				'"reasons" lists why it is not valid or not HIGH (empty array if fully valid).' +
 				"\n\nRequirements:\n" +
 				requirements
@@ -157,7 +157,7 @@ export async function POST(request: Request) {
 		}
 
 		const workMeetsRequirements =
-			result.valid && result.confidence === "HIGH"
+			result.valid && (result.confidence === "HIGH" || result.confidence === "MEDIUM")
 
 		if (!workMeetsRequirements) {
 			return NextResponse.json(
